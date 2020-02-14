@@ -1,0 +1,49 @@
+{
+  "name": "fingertree-actually-good",
+  "version": "0.8",
+  "description": "A javascript implementation of fingertrees that is actually good. i.e. bug free, feature-rich, fast and light-weight.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --coverage",
+    "cover": "jest --coverage --coverageReporters=text-lcov | coveralls",
+    "generate-md-docs": "rimraf tmp && typedoc --exclude \"**/+(*test*|node_modules)/**\" --excludePrivate --includeDeclarations --plugin typedoc-plugin-markdown --theme markdown --hideSources --hideBreadcrumbs --mode file --out tmp && replace \"^## (Hierarchy|Index)(\\n|.)*?(?=([^#]##[^#]))\" \"\" tmp -r && rimraf tmp\\README.md && concat-md --toc --decrease-title-levels --start-title-level-at 2 tmp > docs\\2_api.md && concat-md --decrease-title-levels docs > README.md && rimraf tmp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elias-sundqvist/fingertree-actually-good.git"
+  },
+  "keywords": [
+    "fingertree",
+    "data",
+    "structure",
+    "functional",
+    "persistent",
+    "npm"
+  ],
+  "author": "Elias Sundqvist",
+  "license": "LGPLV3",
+  "bugs": {
+    "url": "https://github.com/elias-sundqvist/fingertree-actually-good/issues"
+  },
+  "homepage": "https://github.com/elias-sundqvist/fingertree-actually-good#readme",
+  "devDependencies": {
+    "@types/jest": "^25.1.2",
+    "benchmark": "^2.1.4",
+    "concat-md": "^0.3.2",
+    "coveralls": "^3.0.9",
+    "fast-check": "^1.22.2",
+    "jest": "^25.1.0",
+    "replace": "^1.1.5",
+    "rimraf": "^3.0.2",
+    "showdown": "^1.9.1",
+    "typedoc": "^0.16.9",
+    "typedoc-plugin-markdown": "^2.2.16"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "index.js",
+    "index.d.ts",
+    "tsconfig.json"
+  ]
+}
