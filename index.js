@@ -558,6 +558,10 @@ class FingerTree {
         return new FingerTree(this.m, concat(this.t, fingerTree2.t));
     }
 
+    isEmpty() {
+        return this.t.t === Empty;
+    }
+
     flatten() {
         return [...treeToIter(this.t)];
     }

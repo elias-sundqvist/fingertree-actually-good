@@ -125,3 +125,8 @@ test('Splitting should work for all indices', ()=>{
     }
 });
 
+test('isEmpty should correctly tell wether the tree is empty', ()=>{
+    expect(t.isEmpty()).toBeTruthy();
+    expect(t.append(1).isEmpty()).toBeFalsy();
+});
+

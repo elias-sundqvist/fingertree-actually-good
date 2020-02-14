@@ -306,6 +306,8 @@ export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, El
      * **Complexity**: O(n log n)
      *
      * **Amortized Complexity**: O(n log n)
+     *
+     * **Example**:
      * ```js
      * const arrayListMeasure = {
      *     base: (x)=>1,
@@ -331,6 +333,7 @@ export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, El
      *
      * **Amortized Complexity**: O(n log n)
      *
+     * **Example**:
      * ```js
      * const arrayListMeasure = {
      *     base: (x)=>1,
@@ -356,6 +359,7 @@ export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, El
      *
      * **Amortized Complexity**: O(n log n)
      *
+     * **Example**:
      * ```js
      * const arrayListMeasure = {
      *     base: (x)=>1,
@@ -382,6 +386,7 @@ export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, El
      *
      * **Amortized Complexity**: O(n log n)
      *
+     * **Example**:
      * ```js
      * const arrayListMeasure = {
      *     base: (x)=>1,
@@ -403,6 +408,7 @@ export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, El
     /**
      * Find the first element such that the monoidal sum of its own measure with everything to the left makes the predicate true.
      *
+     * **Example**:
      * ```js
      * const arrayListMeasure = {
      *     base: (x)=>1,
@@ -427,6 +433,7 @@ export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, El
      *
      * **Amortized Complexity**: O(n log n)
      *
+     * **Example**:
      * ```js
      * const t = fingerTree(myMeasure);
      * const t1 = t.appendMany([1,2,3,4,5])
@@ -443,14 +450,28 @@ export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, El
     concat(fingerTree2: FingerTree<MeasureMonoid, Element, MeasureValue>): FingerTree<MeasureMonoid, Element, MeasureValue>
 
     /**
+     * Check whether the tree is empty
+     *
+     * **Example**
+     * ```js
+     * const t = fingertree(myMeasure);
+     * t.isEmpty() // true;
+     * const t2 = t.append(1);
+     * t2.isEmpty() // false;
+     * ```
+     */
+    isEmpty(): Boolean
+
+    /**
      * Flatten the tree from left to right into a normal javascript array.
      *
+     * **Complexity**: O(n)
+     *
+     * **Example**:
      * ```js
-     * const t = fingerTree(myMeasure);
+     * const t = fingertree(myMeasure);
      * t.append(1).prepend('h').append("hello").flatten() // ['h',1,"Hello"]
      * ```
-     *
-     * **Complexity**: O(n)
      */
     flatten(): Element[]
 

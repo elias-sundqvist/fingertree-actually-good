@@ -215,6 +215,7 @@ Concatenate two fingertrees into a single, bigger, fingertree.
 
 **Amortized Complexity**: O(n log n)
 
+**Example**:
 ```js
 const t = fingerTree(myMeasure);
 const t1 = t.appendMany([1,2,3,4,5])
@@ -247,6 +248,7 @@ Make a tree by removing elements from the left until just before the predicate i
 
 **Amortized Complexity**: O(n log n)
 
+**Example**:
 ```js
 const arrayListMeasure = {
     base: (x)=>1,
@@ -292,6 +294,7 @@ Make a tree by removing elements from the left until just before the predicate i
 
 **Amortized Complexity**: O(n log n)
 
+**Example**:
 ```js
 const arrayListMeasure = {
     base: (x)=>1,
@@ -333,6 +336,7 @@ ___
 
 Find the first element such that the monoidal sum of its own measure with everything to the left makes the predicate true.
 
+**Example**:
 ```js
 const arrayListMeasure = {
     base: (x)=>1,
@@ -373,12 +377,13 @@ ___
 
 Flatten the tree from left to right into a normal javascript array.
 
+**Complexity**: O(n)
+
+**Example**:
 ```js
-const t = fingerTree(myMeasure);
+const t = fingertree(myMeasure);
 t.append(1).prepend('h').append("hello").flatten() // ['h',1,"Hello"]
 ```
-
-**Complexity**: O(n)
 
 **Returns:** *Element[]*
 
@@ -425,6 +430,24 @@ const t = fingertree(myMeasure).appendMany([1,2,3,4,5,6])
 **Returns:** *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
 
 A new tree with the last element removed
+
+___
+
+####  isEmpty
+
+▸ **isEmpty**(): *Boolean*
+
+Check whether the tree is empty
+
+**Example**
+```js
+const t = fingertree(myMeasure);
+t.isEmpty() // true;
+const t2 = t.append(1);
+t2.isEmpty() // false;
+```
+
+**Returns:** *Boolean*
 
 ___
 
@@ -615,6 +638,8 @@ Make a tree by taking elements from the left until just before the predicate is 
 **Complexity**: O(n log n)
 
 **Amortized Complexity**: O(n log n)
+
+**Example**:
 ```js
 const arrayListMeasure = {
     base: (x)=>1,
@@ -660,6 +685,7 @@ Make a tree by taking elements from the left until just before the predicate tur
 
 **Amortized Complexity**: O(n log n)
 
+**Example**:
 ```js
 const arrayListMeasure = {
     base: (x)=>1,
