@@ -16,7 +16,7 @@
  * @typeparam MeasureValue - The type of values returned by the measure
  * @param measure The measure monoid that should be used by the tree.
  */
-export function fingertree<MeasureMonoid extends Measure<Element, MeasureValue>, Element, MeasureValue>(measure: MeasureMonoid): FingerTree<MeasureMonoid, Element, MeasureValue>;
+export default function fingertree<MeasureMonoid extends Measure<Element, MeasureValue>, Element, MeasureValue>(measure: MeasureMonoid): FingerTree<MeasureMonoid, Element, MeasureValue>;
 
 /**
  * A measure can be any monoid.

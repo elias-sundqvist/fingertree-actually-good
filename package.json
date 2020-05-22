@@ -1,6 +1,6 @@
 {
   "name": "fingertree-actually-good",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "A javascript implementation of fingertrees that is actually good. i.e. bug free, feature-rich, fast and light-weight.",
   "main": "index.js",
   "scripts": {
