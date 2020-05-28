@@ -12,11 +12,9 @@
  * ```
  *
  * @typeparam MeasureMonoid - The measure to be used by the tree
- * @typeparam Element - The type of elements stored by the tree
- * @typeparam MeasureValue - The type of values returned by the measure
  * @param measure The measure monoid that should be used by the tree.
  */
-export default function fingertree<MeasureMonoid extends Measure<Element, MeasureValue>, Element, MeasureValue>(measure: MeasureMonoid): FingerTree<MeasureMonoid, Element, MeasureValue>;
+export default function fingertree<MeasureMonoid extends Measure<any, any>>(measure: MeasureMonoid): FingerTree<inferElem<MeasureMonoid>, inferMeasureVal<MeasureMonoid>, MeasureMonoid>;
 
 /**
  * A measure can be any monoid.
@@ -76,6 +74,15 @@ interface Measure<Element, MeasureValue> {
 }
 
 /**
+@hidden
+**/
+type inferElem<T> = T extends Measure<infer E, any> ? E : unknown
+/**
+@hidden
+**/
+type inferMeasureVal<T> = T extends Measure<any, infer MV> ? MV : unknown
+
+/**
  * A FingerTree is a persistent functional data structure that can
  * be used to quickly split and combine large sequences arbitrarily.
  * It also gives quick access to the first and last elements of the tree.
@@ -84,14 +91,14 @@ interface Measure<Element, MeasureValue> {
  * @typeparam Element - The type of elements stored by the tree
  * @typeparam MeasureValue - The type of values returned by the measure
  */
-export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, Element, MeasureValue> implements Iterable<Element> {
+export class FingerTree<Element, MeasureValue, MeasureMonoid extends Measure<Element, MeasureValue>> implements Iterable<Element> {
     /**
      * **Important!** This is an internal function, don't call this constructor
      * unless you are a developer of the library.
      *
-     * Creates a new fingertree based on a measure and an interal tree object ()
+     * Creates a new fingertree based on a measure and an internal tree object ()
      * @param measure The measure monoid that should be used by the tree.
-     * @param tree Optionally, an existing interal tree object to be used.
+     * @param tree Optionally, an existing internal tree object to be used.
      */
     private constructor(measure: MeasureMonoid, tree?: unknown)
 
@@ -114,7 +121,7 @@ export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, El
      * @param iter an iterable of elements
      * @returns a new fingertree with the elements appended
      */
-    appendMany(iter: Iterable<Element>): FingerTree<MeasureMonoid, Element, MeasureValue>
+    appendMany(iter: Iterable<Element>): FingerTree<Element, MeasureValue, MeasureMonoid>
 
     /**
      * Prepend all elements from an iterable to the start of the tree.
@@ -138,7 +145,7 @@ export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, El
      *
      * @returns a new fingertree with the elements prepended
      */
-    prependMany(iter: Iterable<Element>): FingerTree<MeasureMonoid, Element, MeasureValue>
+    prependMany(iter: Iterable<Element>): FingerTree<Element, MeasureValue, MeasureMonoid>
 
     /**
      * Append a single element to the end of the tree.
@@ -159,7 +166,7 @@ export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, El
      *
      * @returns a new fingertree with the element appended
      */
-    append(x: Element): FingerTree<MeasureMonoid, Element, MeasureValue>
+    append(x: Element): FingerTree<Element, MeasureValue, MeasureMonoid>
 
     /**
      * Prepend a single element to the start of the tree.
@@ -181,7 +188,7 @@ export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, El
      *
      * @returns a new fingertree with the element prepended
      */
-    prepend(x: Element): FingerTree<MeasureMonoid, Element, MeasureValue>
+    prepend(x: Element): FingerTree<Element, MeasureValue, MeasureMonoid>
 
     /**
      * Get the first element in the tree
@@ -217,7 +224,7 @@ export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, El
      *
      * @returns A new tree with the first element removed
      */
-    tail(): FingerTree<MeasureMonoid, Element, MeasureValue>
+    tail(): FingerTree<Element, MeasureValue, MeasureMonoid>
 
     /**
      * Get the last element in the tree
@@ -251,7 +258,7 @@ export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, El
      *
      * @returns A new tree with the last element removed
      */
-    init(): FingerTree<MeasureMonoid, Element, MeasureValue>
+    init(): FingerTree<Element, MeasureValue, MeasureMonoid>
 
     /**
      * Compute the monoidal sum of all the tree's elements using the tree measure.
@@ -298,7 +305,7 @@ export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, El
      *
      * @returns the [left, right] split as two new finger trees.
      */
-    split(pred: (measured: MeasureValue) => Boolean, offset?: MeasureValue): [FingerTree<MeasureMonoid, Element, MeasureValue>, FingerTree<MeasureMonoid, Element, MeasureValue>]
+    split(pred: (measured: MeasureValue) => Boolean, offset?: MeasureValue): [FingerTree<Element, MeasureValue, MeasureMonoid>, FingerTree<Element, MeasureValue, MeasureMonoid>]
 
     /**
      * Make a tree by taking elements from the left until just before the predicate is true for the tree measure.
@@ -324,7 +331,7 @@ export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, El
      *
      * @returns the new tree.
      */
-    takeUntil(pred: (measured: MeasureValue) => Boolean, offset?: MeasureValue): FingerTree<MeasureMonoid, Element, MeasureValue>
+    takeUntil(pred: (measured: MeasureValue) => Boolean, offset?: MeasureValue): FingerTree<Element, MeasureValue, MeasureMonoid>
 
     /**
      * Make a tree by removing elements from the left until just before the predicate is true for the sum of the removed elements.
@@ -350,7 +357,7 @@ export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, El
      *
      * @returns the new tree.
      */
-    dropUntil(pred: (measured: MeasureValue) => Boolean, offset?: MeasureValue): FingerTree<MeasureMonoid, Element, MeasureValue>
+    dropUntil(pred: (measured: MeasureValue) => Boolean, offset?: MeasureValue): FingerTree<Element, MeasureValue, MeasureMonoid>
 
     /**
      * Make a tree by taking elements from the left until just before the predicate turns false for the tree measure.
@@ -376,7 +383,7 @@ export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, El
      *
      * @returns the new tree.
      */
-    takeWhile(pred: (measured: MeasureValue) => Boolean, offset?: MeasureValue): FingerTree<MeasureMonoid, Element, MeasureValue>
+    takeWhile(pred: (measured: MeasureValue) => Boolean, offset?: MeasureValue): FingerTree<Element, MeasureValue, MeasureMonoid>
 
 
     /**
@@ -403,7 +410,7 @@ export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, El
      *
      * @returns the new tree.
      */
-    dropWhile(pred: (measured: MeasureValue) => Boolean, offset?: MeasureValue): FingerTree<MeasureMonoid, Element, MeasureValue>
+    dropWhile(pred: (measured: MeasureValue) => Boolean, offset?: MeasureValue): FingerTree<Element, MeasureValue, MeasureMonoid>
 
     /**
      * Find the first element such that the monoidal sum of its own measure with everything to the left makes the predicate true.
@@ -447,7 +454,7 @@ export class FingerTree<MeasureMonoid extends Measure<Element, MeasureValue>, El
      * @param fingerTree2 The finger tree who's elements will follow this tree.
      * @returns The concatenated tree
      */
-    concat(fingerTree2: FingerTree<MeasureMonoid, Element, MeasureValue>): FingerTree<MeasureMonoid, Element, MeasureValue>
+    concat(fingerTree2: FingerTree<Element, MeasureValue, MeasureMonoid>): FingerTree<Element, MeasureValue, MeasureMonoid>
 
     /**
      * Check whether the tree is empty

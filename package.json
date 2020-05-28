@@ -1,12 +1,12 @@
 {
   "name": "fingertree-actually-good",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "A javascript implementation of fingertrees that is actually good. i.e. bug free, feature-rich, fast and light-weight.",
   "main": "index.js",
   "scripts": {
     "test": "jest --coverage",
     "cover": "jest --coverage --coverageReporters=text-lcov | coveralls",
-    "generate-md-docs": "rimraf tmp && typedoc --exclude \"**/+(*test*|node_modules)/**\" --excludePrivate --includeDeclarations --plugin typedoc-plugin-markdown --theme markdown --hideSources --hideBreadcrumbs --mode file --out tmp && replace \"^## (Hierarchy|Index)(\\n|.)*?(?=([^#]##[^#]))\" \"\" tmp -r && rimraf tmp\\README.md && concat-md --toc --decrease-title-levels --start-title-level-at 2 tmp > docs\\2_api.md && concat-md --decrease-title-levels docs > README.md && rimraf tmp"
+    "generate-md-docs": "rimraf tmp && typedoc --exclude \"**/+(*test*|node_modules)/**\" --excludePrivate --includeDeclarations --plugin typedoc-plugin-markdown --theme markdown --hideSources --hideBreadcrumbs --mode file --out tmp && replace \"^## (Hierarchy|Index)(\\n|.)*?(?=([^#]##[^#]))\" \"\" tmp -r && rimraf tmp\\README.md && replace \"(.|\\n)*###  fingertree\" \"# Function: fingertree<**MeasureMonoid**>\" tmp/globals.md && node -e \"require('fs').rename('tmp/globals.md', 'tmp/1_globals.md', function(err) { if (err) console.log(err); console.log('File successfully renamed!') })\" && concat-md --toc --decrease-title-levels --start-title-level-at 1 tmp > docs\\2_api.md && concat-md --decrease-title-levels docs > README.md && rimraf tmp"
   },
   "repository": {
     "type": "git",

@@ -2,30 +2,45 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [fingertree-actually-good](#fingertree-actually-good)
-  - [Functions](#functions)
-- [Class: FingerTree <**MeasureMonoid, Element, MeasureValue**>](#class-fingertree-measuremonoid-element-measurevalue)
+- [Function: fingertree<**MeasureMonoid**>](#function-fingertreemeasuremonoid)
+- [Class: FingerTree <**Element, MeasureValue, MeasureMonoid**>](#class-fingertree-element-measurevalue-measuremonoid)
   - [Type parameters](#type-parameters)
   - [Implements](#implements)
   - [Methods](#methods)
+    - [[Symbol.iterator]](#symboliterator)
+    - [append](#append)
+    - [appendMany](#appendmany)
+    - [concat](#concat)
+    - [dropUntil](#dropuntil)
+    - [dropWhile](#dropwhile)
+    - [firstMatch](#firstmatch)
+    - [flatten](#flatten)
+    - [head](#head)
+    - [init](#init)
+    - [isEmpty](#isempty)
+    - [last](#last)
+    - [measure](#measure)
+    - [prepend](#prepend)
+    - [prependMany](#prependmany)
+    - [split](#split)
+    - [tail](#tail)
+    - [takeUntil](#takeuntil)
+    - [takeWhile](#takewhile)
 - [Interface: Measure <**Element, MeasureValue**>](#interface-measure-element-measurevalue)
   - [Type parameters](#type-parameters-1)
   - [Methods](#methods-1)
+    - [base](#base)
+    - [sum](#sum)
+    - [zero](#zero)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 
-<a name="globalsmd"></a>
+<a name="1_globalsmd"></a>
 
+# Function: fingertree<**MeasureMonoid**>
 
-## fingertree-actually-good
-
-
-### Functions
-
-####  fingertree
-
-▸ **fingertree**<**MeasureMonoid**, **Element**, **MeasureValue**>(`measure`: MeasureMonoid): *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+▸ **fingertree**<**MeasureMonoid**>(`measure`: MeasureMonoid): *[FingerTree](#classesfingertreemd)‹inferElem‹MeasureMonoid›, inferMeasureVal‹MeasureMonoid›, MeasureMonoid›*
 
 Create an empty fingertree which uses the provided measure monoid
 
@@ -41,17 +56,9 @@ const myTree = fingertree(arrayListMeasure)
 
 **Type parameters:**
 
-▪ **MeasureMonoid**: *[Measure](#interfacesmeasuremd)‹Element, MeasureValue›*
+▪ **MeasureMonoid**: *[Measure](#interfacesmeasuremd)‹any, any›*
 
 The measure to be used by the tree
-
-▪ **Element**
-
-The type of elements stored by the tree
-
-▪ **MeasureValue**
-
-The type of values returned by the measure
 
 **Parameters:**
 
@@ -59,23 +66,19 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `measure` | MeasureMonoid | The measure monoid that should be used by the tree.  |
 
-**Returns:** *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+**Returns:** *[FingerTree](#classesfingertreemd)‹inferElem‹MeasureMonoid›, inferMeasureVal‹MeasureMonoid›, MeasureMonoid›*
 
 
 <a name="classesfingertreemd"></a>
 
 
-## Class: FingerTree <**MeasureMonoid, Element, MeasureValue**>
+# Class: FingerTree <**Element, MeasureValue, MeasureMonoid**>
 
 A FingerTree is a persistent functional data structure that can
 be used to quickly split and combine large sequences arbitrarily.
 It also gives quick access to the first and last elements of the tree.
 
-### Type parameters
-
-▪ **MeasureMonoid**: *[Measure](#interfacesmeasuremd)‹Element, MeasureValue›*
-
-The measure to be used by the tree
+## Type parameters
 
 ▪ **Element**
 
@@ -85,15 +88,19 @@ The type of elements stored by the tree
 
 The type of values returned by the measure
 
+▪ **MeasureMonoid**: *[Measure](#interfacesmeasuremd)‹Element, MeasureValue›*
 
-### Implements
+The measure to be used by the tree
+
+
+## Implements
 
 * Iterable‹Element›
 
 
-### Methods
+## Methods
 
-####  [Symbol.iterator]
+###  [Symbol.iterator]
 
 ▸ **[Symbol.iterator]**(): *Iterator‹Element›*
 
@@ -121,9 +128,9 @@ for(let i of t2) {console.log(i)}
 
 ___
 
-####  append
+###  append
 
-▸ **append**(`x`: Element): *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+▸ **append**(`x`: Element): *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 Append a single element to the end of the tree.
 
@@ -145,15 +152,15 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `x` | Element | the element to append  |
 
-**Returns:** *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+**Returns:** *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 a new fingertree with the element appended
 
 ___
 
-####  appendMany
+###  appendMany
 
-▸ **appendMany**(`iter`: Iterable‹Element›): *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+▸ **appendMany**(`iter`: Iterable‹Element›): *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 Append all elements from an iterable to the end of the tree.
 
@@ -176,15 +183,15 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `iter` | Iterable‹Element› | an iterable of elements |
 
-**Returns:** *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+**Returns:** *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 a new fingertree with the elements appended
 
 ___
 
-####  concat
+###  concat
 
-▸ **concat**(`fingerTree2`: [FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›): *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+▸ **concat**(`fingerTree2`: [FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›): *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 Concatenate two fingertrees into a single, bigger, fingertree.
 
@@ -207,17 +214,17 @@ combined.flatten() // [1,2,3,4,5,6,7,8,9,10]
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`fingerTree2` | [FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue› | The finger tree who's elements will follow this tree. |
+`fingerTree2` | [FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid› | The finger tree who's elements will follow this tree. |
 
-**Returns:** *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+**Returns:** *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 The concatenated tree
 
 ___
 
-####  dropUntil
+###  dropUntil
 
-▸ **dropUntil**(`pred`: function, `offset?`: MeasureValue): *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+▸ **dropUntil**(`pred`: function, `offset?`: MeasureValue): *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 Make a tree by removing elements from the left until just before the predicate is true for the sum of the removed elements.
 
@@ -255,15 +262,15 @@ Name | Type |
 
 A constant measure value which the predicate inputs can be offset by.
 
-**Returns:** *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+**Returns:** *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 the new tree.
 
 ___
 
-####  dropWhile
+###  dropWhile
 
-▸ **dropWhile**(`pred`: function, `offset?`: MeasureValue): *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+▸ **dropWhile**(`pred`: function, `offset?`: MeasureValue): *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 Make a tree by removing elements from the left until just before the predicate is false for the sum of the removed elements.
 
@@ -301,13 +308,13 @@ Name | Type |
 
 A constant measure value which the predicate inputs can be offset by.
 
-**Returns:** *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+**Returns:** *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 the new tree.
 
 ___
 
-####  firstMatch
+###  firstMatch
 
 ▸ **firstMatch**(`pred`: function, `offset?`: MeasureValue): *Element*
 
@@ -348,7 +355,7 @@ the matching element
 
 ___
 
-####  flatten
+###  flatten
 
 ▸ **flatten**(): *Element[]*
 
@@ -366,7 +373,7 @@ t.append(1).prepend('h').append("hello").flatten() // ['h',1,"Hello"]
 
 ___
 
-####  head
+###  head
 
 ▸ **head**(): *Element*
 
@@ -388,9 +395,9 @@ The first element of the tree
 
 ___
 
-####  init
+###  init
 
-▸ **init**(): *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+▸ **init**(): *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 Get a new tree with the last element removed
 
@@ -404,13 +411,13 @@ const t = fingertree(myMeasure).appendMany([1,2,3,4,5,6])
 [...t.init()] // [1,2,3,4,5]
 ```
 
-**Returns:** *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+**Returns:** *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 A new tree with the last element removed
 
 ___
 
-####  isEmpty
+###  isEmpty
 
 ▸ **isEmpty**(): *Boolean*
 
@@ -428,7 +435,7 @@ t2.isEmpty() // false;
 
 ___
 
-####  last
+###  last
 
 ▸ **last**(): *Element*
 
@@ -450,7 +457,7 @@ The first element of the tree
 
 ___
 
-####  measure
+###  measure
 
 ▸ **measure**(): *MeasureValue*
 
@@ -474,9 +481,9 @@ the monoidal sum of the tree's elements.
 
 ___
 
-####  prepend
+###  prepend
 
-▸ **prepend**(`x`: Element): *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+▸ **prepend**(`x`: Element): *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 Prepend a single element to the start of the tree.
 
@@ -498,15 +505,15 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `x` | Element | the element to prepend  |
 
-**Returns:** *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+**Returns:** *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 a new fingertree with the element prepended
 
 ___
 
-####  prependMany
+###  prependMany
 
-▸ **prependMany**(`iter`: Iterable‹Element›): *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+▸ **prependMany**(`iter`: Iterable‹Element›): *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 Prepend all elements from an iterable to the start of the tree.
 Note that this reverses the elements.
@@ -530,15 +537,15 @@ Name | Type | Description |
 ------ | ------ | ------ |
 `iter` | Iterable‹Element› | an iterable of elements  |
 
-**Returns:** *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+**Returns:** *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 a new fingertree with the elements prepended
 
 ___
 
-####  split
+###  split
 
-▸ **split**(`pred`: function, `offset?`: MeasureValue): *[[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›, [FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›]*
+▸ **split**(`pred`: function, `offset?`: MeasureValue): *[[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›, [FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›]*
 
 Split the tree at the point where the left side
 is as large as possible without making the predicate true
@@ -578,15 +585,15 @@ Name | Type |
 
 A constant measure value which the predicate inputs can be offset by.
 
-**Returns:** *[[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›, [FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›]*
+**Returns:** *[[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›, [FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›]*
 
 the [left, right] split as two new finger trees.
 
 ___
 
-####  tail
+###  tail
 
-▸ **tail**(): *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+▸ **tail**(): *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 Get a new tree with the first element removed
 
@@ -600,15 +607,15 @@ const t = fingertree(myMeasure).appendMany([1,2,3,4,5,6])
 t.tail().flatten() // [2,3,4,5,6]
 ```
 
-**Returns:** *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+**Returns:** *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 A new tree with the first element removed
 
 ___
 
-####  takeUntil
+###  takeUntil
 
-▸ **takeUntil**(`pred`: function, `offset?`: MeasureValue): *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+▸ **takeUntil**(`pred`: function, `offset?`: MeasureValue): *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 Make a tree by taking elements from the left until just before the predicate is true for the tree measure.
 
@@ -646,15 +653,15 @@ Name | Type |
 
 A constant measure value which the predicate inputs can be offset by.
 
-**Returns:** *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+**Returns:** *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 the new tree.
 
 ___
 
-####  takeWhile
+###  takeWhile
 
-▸ **takeWhile**(`pred`: function, `offset?`: MeasureValue): *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+▸ **takeWhile**(`pred`: function, `offset?`: MeasureValue): *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 Make a tree by taking elements from the left until just before the predicate turns false for the tree measure.
 
@@ -692,7 +699,7 @@ Name | Type |
 
 A constant measure value which the predicate inputs can be offset by.
 
-**Returns:** *[FingerTree](#classesfingertreemd)‹MeasureMonoid, Element, MeasureValue›*
+**Returns:** *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 the new tree.
 
@@ -700,11 +707,11 @@ the new tree.
 <a name="interfacesmeasuremd"></a>
 
 
-## Interface: Measure <**Element, MeasureValue**>
+# Interface: Measure <**Element, MeasureValue**>
 
 A measure can be any monoid.
 
-### Type parameters
+## Type parameters
 
 ▪ **Element**
 
@@ -725,9 +732,9 @@ const arrayListMeasure = {
 
 
 
-### Methods
+## Methods
 
-####  base
+###  base
 
 ▸ **base**(`x`: Element): *MeasureValue*
 
@@ -751,7 +758,7 @@ base: () => 1;
 
 ___
 
-####  sum
+###  sum
 
 ▸ **sum**(`x`: MeasureValue, `y`: MeasureValue): *MeasureValue*
 
@@ -777,7 +784,7 @@ sum: (x,y) => x+y;
 
 ___
 
-####  zero
+###  zero
 
 ▸ **zero**(): *MeasureValue*
 
