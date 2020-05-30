@@ -527,6 +527,7 @@ class FingerTree {
     }
 
     split(pred, offset = NoOffset) {
+        if (this.isEmpty()) return [this, this];
         if (offset === NoOffset) offset = this.m.zero();
         if (!pred(this.m.sum(offset, measure(this.t, this.m)))) return [this, new FingerTree(this.m)];
         const [before, x, after] = splitWithMid(this.t, this.m, pred, offset);

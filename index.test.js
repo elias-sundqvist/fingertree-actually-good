@@ -115,6 +115,11 @@ test('Last should return last element', ()=>{
     expect(t2.last()).toEqual(10)
 });
 
+test('Splitting empty tree should return empty trees', ()=>{
+    expect(t.split(x=>false)).toEqual([t,t]);
+    expect(t.split(x=>true)).toEqual([t,t]);
+})
+
 test('Splitting should work for all indices', ()=>{
     const l100 = Array.from(new Array(100),(v,k)=>k);
     const t2 = t.appendMany(l100);
