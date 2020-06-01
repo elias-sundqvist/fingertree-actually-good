@@ -26,10 +26,16 @@ import fingertree from 'fingertree-actually-good';
 
 
 - [Function: fingertree<**MeasureMonoid**>](#function-fingertreemeasuremonoid)
-- [Class: FingerTree <**Element, MeasureValue, MeasureMonoid**>](#class-fingertree-element-measurevalue-measuremonoid)
+- [Interface: Measure <**Element, MeasureValue**>](#interface-measure-element-measurevalue)
   - [Type parameters](#type-parameters)
-  - [Implements](#implements)
   - [Methods](#methods)
+    - [base](#base)
+    - [sum](#sum)
+    - [zero](#zero)
+- [Class: FingerTree <**Element, MeasureValue, MeasureMonoid**>](#class-fingertree-element-measurevalue-measuremonoid)
+  - [Type parameters](#type-parameters-1)
+  - [Implements](#implements)
+  - [Methods](#methods-1)
     - [[Symbol.iterator]](#symboliterator)
     - [append](#append)
     - [appendMany](#appendmany)
@@ -42,6 +48,8 @@ import fingertree from 'fingertree-actually-good';
     - [init](#init)
     - [isEmpty](#isempty)
     - [last](#last)
+    - [map](#map)
+    - [mapTrue](#maptrue)
     - [measure](#measure)
     - [prepend](#prepend)
     - [prependMany](#prependmany)
@@ -49,12 +57,9 @@ import fingertree from 'fingertree-actually-good';
     - [tail](#tail)
     - [takeUntil](#takeuntil)
     - [takeWhile](#takewhile)
-- [Interface: Measure <**Element, MeasureValue**>](#interface-measure-element-measurevalue)
-  - [Type parameters](#type-parameters-1)
-  - [Methods](#methods-1)
-    - [base](#base)
-    - [sum](#sum)
-    - [zero](#zero)
+    - [updateFirstMatch](#updatefirstmatch)
+    - [updateHead](#updatehead)
+    - [updateLast](#updatelast)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -90,6 +95,103 @@ Name | Type | Description |
 `measure` | MeasureMonoid | The measure monoid that should be used by the tree.  |
 
 **Returns:** *[FingerTree](#classesfingertreemd)‹inferElem‹MeasureMonoid›, inferMeasureVal‹MeasureMonoid›, MeasureMonoid›*
+
+
+<a name="interfacesmeasuremd"></a>
+
+
+# Interface: Measure <**Element, MeasureValue**>
+
+A measure can be any monoid.
+
+## Type parameters
+
+▪ **Element**
+
+The type of elements which are measured by the monoid
+
+▪ **MeasureValue**
+
+The type of values returned returned by the monoid
+
+**Example**:
+```js
+const arrayListMeasure = {
+    base: ()=>1,
+    sum: (x,y)=>x+y,
+    zero: ()=>0
+}
+```
+
+
+
+## Methods
+
+###  base
+
+▸ **base**(`x`: Element): *MeasureValue*
+
+Base is used to compute the initial measure of each element in the tree
+
+**Parameters:**
+
+Name | Type | Description |
+------ | ------ | ------ |
+`x` | Element | an initial element of type Element |
+
+**Returns:** *MeasureValue*
+
+the initial measure for the element
+
+Example:
+```js
+// used for array lists
+base: () => 1;
+```
+
+___
+
+###  sum
+
+▸ **sum**(`x`: MeasureValue, `y`: MeasureValue): *MeasureValue*
+
+Sum is used to combine the measures of two nodes in the tree.
+A monoid should be associative, so sum(a,sum(b,c)) === sum(sum(a,b),c)
+
+**Parameters:**
+
+Name | Type | Description |
+------ | ------ | ------ |
+`x` | MeasureValue | the measure of the first part |
+`y` | MeasureValue | the measure of the second part |
+
+**Returns:** *MeasureValue*
+
+the combined measure
+
+**Example**:
+```js
+// used for array lists
+sum: (x,y) => x+y;
+```
+
+___
+
+###  zero
+
+▸ **zero**(): *MeasureValue*
+
+The measure of an empty tree.
+
+**Returns:** *MeasureValue*
+
+the measure of an empty tree.
+
+**Example**:
+```js
+// used for array lists
+zero: () => 0;
+```
 
 
 <a name="classesfingertreemd"></a>
@@ -480,6 +582,147 @@ The first element of the tree
 
 ___
 
+###  map
+
+▸ **map**(`mapFunction`: function): *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
+
+Map each element `e` of the tree to `mapFunction(e)`
+
+**Example**:
+```js
+const t = fingerTree(myMeasure);
+const t1 = t.appendMany([1,2,3,4,5])
+const t2 = t1.map(x=>x*2)
+t2.flatten() // [2,4,6,8,10]
+```
+
+**Parameters:**
+
+▪ **mapFunction**: *function*
+
+The mapping function
+
+▸ (`element`: Element): *Element*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`element` | Element |
+
+**Returns:** *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
+
+▸ **map**<**T**, **M**>(`mapFunction`: function, `newMeasure`: M): *[FingerTree](#classesfingertreemd)‹T, inferMeasureVal‹M›, M›*
+
+Map each element `e` of the tree to `mapFunction(e)`, and replace the measure being used.
+
+**Example**:
+```js
+const sumMeasure = {base: x=>x, sum: (x,y)=>x+y, zero: ()=>0};
+const prodMeasure = {base: x=>x, sum: (x,y)=>x*y, zero: ()=>1};
+const t = fingerTree(sumMeasure);
+const t1 = t.appendMany([1,2,3,4,5])
+t1.flatten() // [1,2,3,4,5]
+t1.measure() // 1+2+3+4+5=15
+const t2 = t1.map(x=>x*2, prodMeasure)
+t2.flatten() // [2,4,6,8,10]
+t2.measure() // 2*4*6*8*10=3840
+```
+
+**Type parameters:**
+
+▪ **T**
+
+▪ **M**: *[Measure](#interfacesmeasuremd)‹T, any›*
+
+**Parameters:**
+
+▪ **mapFunction**: *function*
+
+The mapping function
+
+▸ (`element`: Element): *T*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`element` | Element |
+
+▪ **newMeasure**: *M*
+
+The new measure
+
+**Returns:** *[FingerTree](#classesfingertreemd)‹T, inferMeasureVal‹M›, M›*
+
+___
+
+###  mapTrue
+
+▸ **mapTrue**(`mapFunction`: function, `pred`: function): *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
+
+Map each element `e` that evaluates the predicate to true to `mapFunction(e)`
+The predicate must, as usual, first always evaluate to `false` and then always to `true`,
+but it has access to a dynamically updating `globalMeasure` which corresponds
+to the measure of the entire tree given the changes that have been made so far.
+This allows for some values to be skipped.
+
+**Example**:
+```js
+// in this example we double all the odd numbers
+const myMeasure = {
+   base: (x) => ({
+     count: 1,
+     firstOddPos: x % 2 ? 0 : Number.POSITIVE_INFINITY,
+   }),
+   sum: (x, y) => ({
+     count: x.count + y.count,
+     firstOddPos: Math.min(x.firstOddPos, x.count + y.firstOddPos),
+   }),
+   zero: () => ({ count: 0, firstOddPos: Number.POSITIVE_INFINITY }),
+};
+const t = fingertree(myMeasure);
+const t2 = t.appendMany([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+const t3 = t2.mapTrue(
+   (x) => x * 2,
+   (left, glob) => left.count > glob.firstOddPos
+);
+t3.flatten() // [2, 2, 6, 4, 10, 6, 14, 8, 18, 10];
+```
+
+**Parameters:**
+
+▪ **mapFunction**: *function*
+
+The mapping function
+
+▸ (`element`: Element, `leftInclusiveMeasure`: MeasureValue, `globalMeasure`: MeasureValue): *Element*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`element` | Element |
+`leftInclusiveMeasure` | MeasureValue |
+`globalMeasure` | MeasureValue |
+
+▪ **pred**: *function*
+
+A predicate function that takes the measure of the left side and returns a Bool. Should only flip once as the input grows.
+
+▸ (`leftInclusiveMeasure`: MeasureValue, `globalMeasure`: MeasureValue): *Boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`leftInclusiveMeasure` | MeasureValue |
+`globalMeasure` | MeasureValue |
+
+**Returns:** *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
+
+___
+
 ###  measure
 
 ▸ **measure**(): *MeasureValue*
@@ -726,102 +969,128 @@ A constant measure value which the predicate inputs can be offset by.
 
 the new tree.
 
+___
 
-<a name="interfacesmeasuremd"></a>
+###  updateFirstMatch
 
+▸ **updateFirstMatch**(`updateFunction`: function, `pred`: function, `offset?`: MeasureValue): *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
-# Interface: Measure <**Element, MeasureValue**>
+Get a new fingertree where the first matching item is updated.
 
-A measure can be any monoid.
+The first matching item is, similar to `split`, the first element for which the predicate is evaluated to true.
+The predicate function must only change once from false to true, going from left to right. And the input is the
+measure of the left side, including the element itself.
 
-## Type parameters
+The update is performed by applying the `updateFunction` function to the matching element.
 
-▪ **Element**
-
-The type of elements which are measured by the monoid
-
-▪ **MeasureValue**
-
-The type of values returned returned by the monoid
-
-**Example**:
+**Example**
 ```js
 const arrayListMeasure = {
-    base: ()=>1,
+    base: (x)=>1,
     sum: (x,y)=>x+y,
     zero: ()=>0
 }
+const t = fingertree(arrayListMeasure)
+const t1 = t.appendMany([10,20,30,40,50])
+const t2 = t1.updateFirstMatch(x=>x/2, x=>x>2)
+t2.flatten() // [10, 20, 15, 40, 50]
 ```
-
-
-
-## Methods
-
-###  base
-
-▸ **base**(`x`: Element): *MeasureValue*
-
-Base is used to compute the initial measure of each element in the tree
 
 **Parameters:**
 
-Name | Type | Description |
------- | ------ | ------ |
-`x` | Element | an initial element of type Element |
+▪ **updateFunction**: *function*
 
-**Returns:** *MeasureValue*
+A function that takes the current first matching element and returns a new element to replace it with.
 
-the initial measure for the element
-
-Example:
-```js
-// used for array lists
-base: () => 1;
-```
-
-___
-
-###  sum
-
-▸ **sum**(`x`: MeasureValue, `y`: MeasureValue): *MeasureValue*
-
-Sum is used to combine the measures of two nodes in the tree.
-A monoid should be commutative, so sum(a,sum(b,c)) === sum(sum(a,b),c)
+▸ (`element`: Element): *Element*
 
 **Parameters:**
 
-Name | Type | Description |
------- | ------ | ------ |
-`x` | MeasureValue | the measure of the first part |
-`y` | MeasureValue | the measure of the second part |
+Name | Type |
+------ | ------ |
+`element` | Element |
 
-**Returns:** *MeasureValue*
+▪ **pred**: *function*
 
-the combined measure
+A predicate function that takes the measure of the left side and returns a Bool. Should only flip once as the input grows.
 
-**Example**:
-```js
-// used for array lists
-sum: (x,y) => x+y;
-```
+▸ (`measured`: MeasureValue): *Boolean*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`measured` | MeasureValue |
+
+▪`Optional`  **offset**: *MeasureValue*
+
+A constant measure value which the predicate inputs can be offset by.
+
+**Returns:** *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 ___
 
-###  zero
+###  updateHead
 
-▸ **zero**(): *MeasureValue*
+▸ **updateHead**(`updateFunction`: function): *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
-The measure of an empty tree.
+Get a new finger tree with the first element replaced
 
-**Returns:** *MeasureValue*
+**Parameters:**
 
-the measure of an empty tree.
+▪ **updateFunction**: *function*
 
-**Example**:
+A function that takes the current first element and returns the new one.
+
+**Example**
 ```js
-// used for array lists
-zero: () => 0;
+const t = fingertree(myMeasure);
+const t1 = t.appendMany([1,2,3,4,5])
+const t2 = t1.updateHead(x=>x+10);
+t2.flatten() // [11,2,3,4,5]
 ```
+
+▸ (`element`: Element): *Element*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`element` | Element |
+
+**Returns:** *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
+
+___
+
+###  updateLast
+
+▸ **updateLast**(`updateFunction`: function): *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
+
+Get a new finger tree with the last element replaced
+
+**Parameters:**
+
+▪ **updateFunction**: *function*
+
+A function that takes the current last element and returns the new one.
+
+**Example**
+```js
+const t = fingertree(myMeasure);
+const t1 = t.appendMany([1,2,3,4,5])
+const t2 = t1.updateLast(x=>x+10);
+t2.flatten() // [1,2,3,4,15]
+```
+
+▸ (`element`: Element): *Element*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`element` | Element |
+
+**Returns:** *[FingerTree](#classesfingertreemd)‹Element, MeasureValue, MeasureMonoid›*
 
 
 <a name="3_benchmark_resultsmd"></a>
